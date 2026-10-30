@@ -41,6 +41,19 @@ jobs:
           path: JCEW-Bill.apk
           if-no-files-found: error
 
+      - name: Deploy to GitHub Pages branch (gh-pages)
+        run: |
+          mkdir -p /tmp/web
+          cp app/src/main/assets/* /tmp/web/
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan gh-pages-branch
+          git rm -rf .
+          cp -r /tmp/web/* .
+          git add .
+          git commit -m "Deploy live web app to GitHub Pages"
+          git push -f origin gh-pages-branch:gh-pages
+
       - name: Publish to apk branch for direct download
         run: |
           git config --global user.name "github-actions[bot]"
