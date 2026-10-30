@@ -56,9 +56,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v1.1
-          name: "JCEW Bill v1.1"
-          body: "Direct APK download for JCEW Bill Android app with Digital Signature, Image Stamp upload, and permanent Logo fix."
+          tag_name: v1.2
+          name: "JCEW Bill v1.2"
+          body: "Direct APK download for JCEW Bill Android app v1.2 with instant Signature Pad, Stamp Photo upload, and Canvas+Image Logo."
           files: /tmp/JCEW-Bill.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
