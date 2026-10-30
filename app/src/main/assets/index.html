@@ -112,7 +112,7 @@ table{border-collapse:collapse;width:100%}
 .items{border:1.4px solid var(--red);border-top:none}
 .items th{font:700 13px Arial;color:#1f3c88;border:1.4px solid var(--red);border-top:none;padding:3px 2px;height:11mm}
 .items td{border-left:1.4px solid var(--red);border-right:1.4px solid var(--red);height:7.2mm;font-size:13px;padding:0}
-.items td input{height:7mm}
+.items td input{height:7mm;line-height:1.2;padding:0 2px 1px;margin:0;box-sizing:border-box;vertical-align:middle}
 .c-sr{width:6%} .c-desc{width:44%} .c-hsn{width:8%} .c-qty{width:9.5%} .c-rate{width:9.5%} .c-per{width:6%} .c-rs{width:12%} .c-ps{width:5%}
 .items td.num input,.tot td.num input{text-align:right}
 .items td.ctr input{text-align:center}
@@ -123,13 +123,14 @@ table{border-collapse:collapse;width:100%}
 .words .w1{font:700 13px Arial;color:#1f3c88;padding:3px 4px;border-bottom:1.4px solid var(--red);display:flex;gap:4px;min-height:9mm}
 .words .w2{border-bottom:1.4px solid var(--red);height:9mm;padding:0 4px;display:flex;align-items:center}
 .bank{padding:4px 4px;font:700 13.5px Arial;color:#1f3c88;line-height:1.85}
-.tot td{border-bottom:1.4px solid var(--red);height:7.9mm;font:700 13px Arial;color:#1f3c88}
+.tot td{border-bottom:1.4px solid var(--red);height:8.2mm;font:700 13px Arial;color:#1f3c88;vertical-align:middle;padding:0 4px}
 .tot tr:last-child td{border-bottom:none}
-.tot td.lbl{text-align:right;padding-right:5px;width:47%;border-right:1.4px solid var(--red)}
+.tot td.lbl{text-align:right;padding-right:6px;width:47%;border-right:1.4px solid var(--red)}
 .tot td.rs{width:37%;border-right:1.4px solid var(--red)}
 .tot td.ps{width:16%}
+.tot td input{height:7mm;font:700 13px Arial;color:#1c2f8a;padding:0 2px 2px;margin:0;box-sizing:border-box;line-height:1.2;vertical-align:middle}
 .tot .pct{display:inline-flex;align-items:center;justify-content:flex-end;gap:2px}
-.tot .pct input{width:12mm;border-bottom:1px dotted #1f3c88;text-align:center;color:#1c2f8a}
+.tot .pct input{width:12mm;height:6mm;border-bottom:1px dotted #1f3c88;text-align:center;color:#1c2f8a;padding:0 1px 1px;margin:0}
 
 /* ---------- footer & signature ---------- */
 .footer{display:grid;grid-template-columns:57.5% 42.5%;border:1.4px solid var(--red);margin-top:3mm;border-top:1.4px solid var(--red)}
