@@ -854,13 +854,23 @@ table{border-collapse:collapse;width:100%}
 
     const emptyPrompt = document.getElementById("sigEmptyPrompt");
     const prevPromptDisplay = emptyPrompt ? emptyPrompt.style.display : "";
-    if(!currentSignatureDataUrl && emptyPrompt) emptyPrompt.style.display = "none";
+    if(emptyPrompt) emptyPrompt.style.display = "none";
     
     const interBox = document.getElementById("sigInteractiveBox");
     const prevBoxBorder = interBox ? interBox.style.border : "";
-    if(!currentSignatureDataUrl && interBox) interBox.style.border = "none";
+    const prevBoxBg = interBox ? interBox.style.background : "";
+    if(interBox) {
+      interBox.style.border = "none";
+      interBox.style.background = "transparent";
+    }
 
-    const prevT=scaler.style.transform; scaler.style.transform="none";
+    const prevT=scaler.style.transform;
+    const prevW=scaler.style.width;
+    const prevH=scaler.style.height;
+    scaler.style.transform="none";
+    scaler.style.width="auto";
+    scaler.style.height="auto";
+
     try{
       const canvas=await html2canvas(page,{
         scale:2,
@@ -868,38 +878,8 @@ table{border-collapse:collapse;width:100%}
         useCORS:true,
         allowTaint:true,
         logging:false,
-        windowWidth:page.scrollWidth
+        windowWidth:page.offsetWidth
       });
-
-      // POST-DRAW LOGO & SIGNATURE DIRECTLY TO CANVAS:
-      // This guarantees the logo and signature are NEVER missing in the final PDF!
-      const ctx = canvas.getContext("2d");
-      const scaleFactor = canvas.width / page.offsetWidth;
-      const pageRect = page.getBoundingClientRect();
-
-      // 1. Explicitly draw company logo:
-      const logoEl = document.getElementById("companyLogo");
-      if(logoEl && logoEl.complete && logoEl.naturalWidth > 0){
-        const lRect = logoEl.getBoundingClientRect();
-        const lx = (lRect.left - pageRect.left) * scaleFactor;
-        const ly = (lRect.top - pageRect.top) * scaleFactor;
-        const lw = lRect.width * scaleFactor;
-        const lh = lRect.height * scaleFactor;
-        ctx.drawImage(logoEl, lx, ly, lw, lh);
-      }
-
-      // 2. Explicitly draw signature if present:
-      if(currentSignatureDataUrl){
-        const sigEl = document.getElementById("sigDisplayImg");
-        if(sigEl && sigEl.complete && sigEl.naturalWidth > 0){
-          const sRect = sigEl.getBoundingClientRect();
-          const sx = (sRect.left - pageRect.left) * scaleFactor;
-          const sy = (sRect.top - pageRect.top) * scaleFactor;
-          const sw = sRect.width * scaleFactor;
-          const sh = sRect.height * scaleFactor;
-          ctx.drawImage(sigEl, sx, sy, sw, sh);
-        }
-      }
 
       const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
       const img=canvas.toDataURL("image/jpeg",0.94);
@@ -908,9 +888,14 @@ table{border-collapse:collapse;width:100%}
       return pdf.output("blob");
     } finally {
       scaler.style.transform=prevT;
+      scaler.style.width=prevW;
+      scaler.style.height=prevH;
       holders.forEach((i,k)=>i.placeholder=saved[k]);
       if(emptyPrompt) emptyPrompt.style.display = prevPromptDisplay;
-      if(interBox) interBox.style.border = prevBoxBorder;
+      if(interBox) {
+        interBox.style.border = prevBoxBorder;
+        interBox.style.background = prevBoxBg;
+      }
     }
   }
 
