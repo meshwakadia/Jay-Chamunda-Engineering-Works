@@ -187,6 +187,28 @@ public class MainActivity extends Activity {
                         new PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).build());
             });
         }
+
+        @JavascriptInterface
+        public void saveBackupFile(String json, String name) {
+            try {
+                byte[] data = json.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                if (Build.VERSION.SDK_INT >= 29) {
+                    ContentValues v = new ContentValues();
+                    v.put(MediaStore.Downloads.DISPLAY_NAME, name);
+                    v.put(MediaStore.Downloads.MIME_TYPE, "application/json");
+                    v.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/JCEW Bills");
+                    Uri uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, v);
+                    try (OutputStream o = getContentResolver().openOutputStream(uri)) { o.write(data); }
+                    toast("Backup saved in Downloads/JCEW Bills");
+                } else {
+                    File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "JCEW Bills");
+                    dir.mkdirs();
+                    File f = new File(dir, name);
+                    try (FileOutputStream o = new FileOutputStream(f)) { o.write(data); }
+                    toast("Backup saved in Downloads/JCEW Bills");
+                }
+            } catch (Exception e) { toast("Could not save backup file"); }
+        }
     }
 
     private boolean installed(String pkg) {
