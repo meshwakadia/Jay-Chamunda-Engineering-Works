@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tax Invoice – Jay Chamunda Engineering Works</title>
+<script src="html2canvas.min.js"></script>
+<script src="jspdf.umd.min.js"></script>
+<style>
+:root{
+  --red:#d42a2a;
+  --ink:#1a1a1a;
+  --paper:#ffffff;
+  --desk:#e9e9ec;
+  --bar:#ffffff;
+  --bar-text:#1a1a1a;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --desk:#202024; --bar:#2c2c31; --bar-text:#f2f2f2; color-scheme:dark; }
+}
+:root[data-theme="dark"]{ --desk:#202024; --bar:#2c2c31; --bar-text:#f2f2f2; color-scheme:dark; }
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);font-family:Arial, Helvetica, sans-serif;color:var(--ink)}
+
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);color:var(--bar-text);
+  padding:8px 10px;border-bottom:1px solid rgba(128,128,128,.3);display:flex;flex-direction:column;gap:8px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+.tb-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center}
+.tb-title{font:700 15px Arial;color:var(--red)}
+.cust{display:flex;align-items:center;gap:6px;flex:1 1 260px;max-width:420px}
+.cust label{font:600 13px Arial;white-space:nowrap}
+.cust input{flex:1;font:16px Arial;color:var(--bar-text);border:1px solid rgba(128,128,128,.5);border-radius:6px;padding:7px 8px;background:transparent}
+button{font:600 14px Arial,sans-serif;padding:8px 12px;border-radius:8px;border:1px solid var(--red);background:#fff;color:var(--red);cursor:pointer}
+button:focus-visible{outline:3px solid #2b6cb0;outline-offset:2px}
+button:disabled{opacity:.6;cursor:wait}
+
+.actions{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bar);border-top:1px solid rgba(128,128,128,.3);
+  display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:8px;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px))}
+.actions button{padding:12px 6px;font-size:15px;border-radius:10px}
+.actions .wa{background:#25d366;border-color:#25d366;color:#fff}
+.actions .pr{background:var(--red);color:#fff}
+
+.scroller{overflow-x:auto;padding:12px 8px 110px}
+.scaler{margin:0 auto;transform-origin:top left}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;
+  background:#222;color:#fff;font:14px Arial;padding:10px 14px;border-radius:10px;max-width:92vw;text-align:center;display:none}
+.toast a{color:#7cf3a8;font-weight:700}
+.page{width:210mm;min-height:290mm;margin:0;background:var(--paper);padding:9mm 9mm 8mm;color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.18)}
+
+input{font:inherit;color:#1c2f8a;border:none;background:transparent;outline:none;width:100%;padding:0 2px}
+input:focus{background:#fff6d6}
+.red{color:var(--red)}
+
+/* ---------- header ---------- */
+.head{position:relative;height:44mm}
+.tax-label{position:absolute;left:0;top:0;background:#1f3c88;color:#fff;font:700 12px Arial;padding:2px 5px;letter-spacing:.2px}
+.shree{position:absolute;left:0;right:0;top:1mm;text-align:center;font-size:10px;color:var(--red)}
+.mob{position:absolute;right:0;top:0;text-align:right;font:700 13px Arial;color:var(--ink);line-height:1.25}
+.copies{position:absolute;right:4mm;top:11mm;font:700 13px Arial;color:#1f3c88;line-height:1.55}
+.copies label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.copies input{width:14px;height:14px;margin:0;accent-color:#1f3c88}
+.logo{position:absolute;left:30mm;top:7mm;width:24mm;height:20mm}
+.name{position:absolute;left:58mm;top:6mm;font-family:"Times New Roman",Georgia,serif;font-weight:700;color:var(--red);line-height:1.08}
+.name .l1{font-size:32px;letter-spacing:.5px}
+.name .l2{font-size:31px;letter-spacing:.2px}
+.mfg{position:absolute;left:55mm;right:0;top:28.5mm;font:700 13.5px Arial;color:#1f3c88;border-bottom:1.5px solid var(--red);padding-bottom:1px}
+.addr{position:absolute;left:3mm;right:0;top:34mm;font-size:12.6px;line-height:1.4;color:#1f3c88}
+
+/* ---------- generic boxes ---------- */
+.box{border:1.4px solid var(--red)}
+.grid-top{display:grid;grid-template-columns:57% 43%}
+.left-top{border-right:1.4px solid var(--red)}
+.gst{font:700 15px Arial;color:#1f3c88;padding:2px 4px;border-bottom:1.4px solid var(--red);height:8mm;display:flex;align-items:center}
+.ms{padding:2px 4px;font-size:13px;font-weight:700;color:#1f3c88}
+.ms .line{display:flex;align-items:flex-end;gap:4px;height:7mm}
+.ms .line input{border-bottom:1px solid var(--red);height:6mm}
+.party{display:flex;align-items:center;gap:6px;padding:2px 4px;font:700 13px Arial;color:#1f3c88}
+.gstin-boxes{display:flex}
+.gstin-boxes input{width:5.3mm;height:7mm;border:1px solid var(--red);border-left:none;text-align:center;text-transform:uppercase;padding:0}
+.gstin-boxes input:first-child{border-left:1px solid var(--red)}
+.state{display:flex;gap:6px;padding:1px 4px 2px;font:700 13px Arial;color:#1f3c88;border-top:1px solid var(--red)}
+.state span{white-space:nowrap}
+
+.rt-row{display:grid;grid-template-columns:28% 26% 46%;border-bottom:1.4px solid var(--red);height:7.6mm}
+.rt-row:last-child{border-bottom:none}
+.rt-row>div{display:flex;align-items:center;padding:0 4px;font:700 12.5px Arial;color:#1f3c88}
+.rt-row>div+div{border-left:1.4px solid var(--red)}
+.rt-row .dt{gap:4px}
+.rt-row .dt input{width:100%}
+.rt-row.wide{grid-template-columns:100%}
+.rt-row.wide>div{gap:4px}
+.rt-row.place{grid-template-columns:54% 46%}
+
+/* ---------- items ---------- */
+table{border-collapse:collapse;width:100%}
+.items{border:1.4px solid var(--red);border-top:none}
+.items th{font:700 13px Arial;color:#1f3c88;border:1.4px solid var(--red);border-top:none;padding:3px 2px;height:11mm}
+.items td{border-left:1.4px solid var(--red);border-right:1.4px solid var(--red);height:7.2mm;font-size:13px;padding:0}
+.items td input{height:7mm}
+.c-sr{width:6%} .c-desc{width:44%} .c-hsn{width:8%} .c-qty{width:9.5%} .c-rate{width:9.5%} .c-per{width:6%} .c-rs{width:12%} .c-ps{width:5%}
+.items td.num input,.tot td.num input{text-align:right}
+.items td.ctr input{text-align:center}
+
+/* ---------- bottom ---------- */
+.bottom{display:grid;grid-template-columns:57.5% 42.5%;border:1.4px solid var(--red);border-top:none}
+.words{border-right:1.4px solid var(--red);display:flex;flex-direction:column}
+.words .w1{font:700 13px Arial;color:#1f3c88;padding:3px 4px;border-bottom:1.4px solid var(--red);display:flex;gap:4px;min-height:9mm}
+.words .w2{border-bottom:1.4px solid var(--red);height:9mm;padding:0 4px;display:flex;align-items:center}
+.bank{padding:4px 4px;font:700 13.5px Arial;color:#1f3c88;line-height:1.85}
+.tot td{border-bottom:1.4px solid var(--red);height:7.9mm;font:700 13px Arial;color:#1f3c88}
+.tot tr:last-child td{border-bottom:none}
+.tot td.lbl{text-align:right;padding-right:5px;width:47%;border-right:1.4px solid var(--red)}
+.tot td.rs{width:37%;border-right:1.4px solid var(--red)}
+.tot td.ps{width:16%}
+.tot .pct{display:inline-flex;align-items:center;justify-content:flex-end;gap:2px}
+.tot .pct input{width:12mm;border-bottom:1px dotted #1f3c88;text-align:center;color:#1c2f8a}
+
+.footer{display:grid;grid-template-columns:57.5% 42.5%;border:1.4px solid var(--red);border-top:none;margin-top:3mm;border-top:1.4px solid var(--red)}
+.terms{padding:4px 6px;font-size:11px;line-height:1.35;color:#1f3c88;border-right:1.4px solid var(--red)}
+.terms ol{margin:0;padding-left:14px}
+.sign{position:relative;min-height:25mm}
+.sign .for{position:absolute;right:16mm;bottom:3mm;color:var(--red);font-size:14px;line-height:1.1}
+
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .toolbar,.actions,.toast,body::before{display:none}
+  .scaler{transform:none!important;width:auto!important;height:auto!important}
+  .scroller{padding:0;overflow:visible}
+  .page{box-shadow:none;margin:0}
+  input:focus{background:transparent}
+  input::placeholder{color:transparent}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="tb-row">
+    <span class="tb-title">Jay Chamunda – Bill</span>
+    <div class="cust"><label for="custPhone">Customer WhatsApp</label><input id="custPhone" type="tel" inputmode="tel" placeholder="98XXXXXXXX" autocomplete="off"></div>
+  </div>
+  <div class="tb-row">
+    <button id="addRow">+ Row</button>
+    <button id="removeRow">− Row</button>
+    <button id="zoomBtn">Zoom in</button>
+    <button id="clearBtn">New bill</button>
+  </div>
+</div>
+
+<div class="actions">
+  <button class="pr" id="printBtn">Print</button>
+  <button id="pdfBtn">Save PDF</button>
+  <button class="wa" id="waBtn">Send on WhatsApp</button>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<div class="scroller">
+<div class="scaler" id="scaler">
+<div class="page" id="page">
+
+  <!-- HEADER -->
+  <div class="head">
+    <div class="tax-label">TAX INVOICE</div>
+    <div class="shree">॥ શ્રી ગણેશાય નમઃ ॥</div>
+    <div class="mob">M. : 9913715414<br>9426338689</div>
+    <div class="copies">
+      <label><input type="checkbox" data-k="cOrig"> ORIGINAL</label>
+      <label><input type="checkbox" data-k="cDup"> DUPLICATE</label>
+      <label><input type="checkbox" data-k="cTrip"> TRIPLICATE</label>
+    </div>
+
+    <svg class="logo" viewBox="0 0 120 100" aria-label="Jay Chamunda Engineering Works logo">
+      <!-- red C ring -->
+      <path d="M92 22 A42 42 0 1 0 92 78" fill="none" stroke="#d42a2a" stroke-width="17"/>
+      <!-- connector bar -->
+      <rect x="66" y="45" width="40" height="10" fill="#d42a2a"/>
+      <rect x="104" y="41" width="6" height="18" fill="#d42a2a"/>
+      <!-- inner badge -->
+      <circle cx="58" cy="50" r="15" fill="#fff" stroke="#1f3c88" stroke-width="3"/>
+      <text x="58" y="56.5" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="17" fill="#1f3c88">W</text>
+      <rect x="51" y="35.5" width="3" height="5" fill="#1f3c88"/>
+      <rect x="62" y="35.5" width="3" height="5" fill="#1f3c88"/>
+    </svg>
+
+    <div class="name"><div class="l1">JAY CHAMUNDA</div><div class="l2">Engineering Works</div></div>
+    <div class="mfg">Mfg. of : TEXTILE &amp; ENGINEERING PARTS &amp; ALL TYPE OF MATERIALS</div>
+    <div class="addr">
+      Office&nbsp;&nbsp;: D/20, Harsiddh Smruti Society, Nr. Navsarjan School, G.S.T. Road, Ranip, Ahmedabad - 382480.<br>
+      Factory : 2, Lilaji Desai Chawl, Opp. Agrawal Ice Factory, Dudheswar Road, Mahedi Kuwa, Ahmedabad-380004.
+    </div>
+  </div>
+
+  <!-- PARTY / INVOICE DETAILS -->
+  <div class="box grid-top">
+    <div class="left-top">
+      <div class="gst">GSTIN : 24AYAPK3398M1Z2</div>
+      <div class="ms">
+        <div class="line"><span>M/s.</span><input data-k="ms1"></div>
+        <div class="line"><input data-k="ms2"></div>
+        <div class="line"><input data-k="ms3"></div>
+      </div>
+      <div class="party"><span>PARTY<br>GSTIN</span><div class="gstin-boxes" id="gstinBoxes"></div></div>
+      <div class="state"><span>State :</span><input data-k="state"><span>State Code :</span><input data-k="stateCode" style="max-width:20mm"></div>
+    </div>
+    <div>
+      <div class="rt-row"><div>Invoice No.</div><div><input data-k="invNo"></div><div class="dt">Dt.<input data-k="invDt" placeholder="  -   -20"></div></div>
+      <div class="rt-row"><div>D.C. No.</div><div><input data-k="dcNo"></div><div class="dt">Dt.<input data-k="dcDt" placeholder="  -   -20"></div></div>
+      <div class="rt-row"><div>P.O. No.</div><div><input data-k="poNo"></div><div class="dt">Dt.<input data-k="poDt" placeholder="  -   -20"></div></div>
+      <div class="rt-row wide"><div>Transport Mode :<input data-k="transport"></div></div>
+      <div class="rt-row wide"><div>Vehicle No. :<input data-k="vehicle"></div></div>
+      <div class="rt-row place"><div style="font-size:11.5px">Place of Supply<input data-k="place"></div><div class="dt">Dt.<input data-k="placeDt" placeholder="  -   -20"></div></div>
+    </div>
+  </div>
+
+  <!-- ITEMS -->
+  <table class="items">
+    <thead>
+      <tr>
+        <th class="c-sr">Sr.<br>No.</th>
+        <th class="c-desc">Description</th>
+        <th class="c-hsn">HSN<br>CODE</th>
+        <th class="c-qty">Qty</th>
+        <th class="c-rate">Rate</th>
+        <th class="c-per">Per</th>
+        <th class="c-rs">Amount<br>Rs.</th>
+        <th class="c-ps">Ps.</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <!-- TOTALS -->
+  <div class="bottom">
+    <div class="words">
+      <div style="flex:1"></div>
+      <div class="w1"><span style="white-space:nowrap">Rs. in Words :</span><span id="inWords" style="font-weight:400;color:#1c2f8a"></span></div>
+      <div class="w2"><input data-k="words2"></div>
+      <div class="bank">
+        Bank Name : The Navnirman Co-Op. Bank Ltd.<br>
+        Branch : Ranip &nbsp;&nbsp;•&nbsp; IFSC Code : NVNM0000004<br>
+        Account No. : 139004102002867
+      </div>
+    </div>
+    <table class="tot">
+      <tr><td class="lbl">Other Charges</td><td class="rs num"><input data-k="other" inputmode="decimal"></td><td class="ps"></td></tr>
+      <tr><td class="lbl">Total Before TAX</td><td class="rs num" id="tbRs"></td><td class="ps num" id="tbPs"></td></tr>
+      <tr><td class="lbl"><span class="pct">CGST<input data-k="cgstP" inputmode="decimal">%</span></td><td class="rs num" id="cgRs"></td><td class="ps num" id="cgPs"></td></tr>
+      <tr><td class="lbl"><span class="pct">SGST<input data-k="sgstP" inputmode="decimal">%</span></td><td class="rs num" id="sgRs"></td><td class="ps num" id="sgPs"></td></tr>
+      <tr><td class="lbl"><span class="pct">IGST<input data-k="igstP" inputmode="decimal">%</span></td><td class="rs num" id="igRs"></td><td class="ps num" id="igPs"></td></tr>
+      <tr><td class="lbl">Round Off</td><td class="rs num" id="roRs"></td><td class="ps num" id="roPs"></td></tr>
+      <tr><td class="lbl">GRAND TOTAL</td><td class="rs num" id="gtRs"></td><td class="ps num" id="gtPs"></td></tr>
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="terms">
+      <ol>
+        <li>Goods once sold will not be taken back.</li>
+        <li>No. Responsibility for any damages</li>
+        <li>Interest @ 18% p.a. Will be charged on out standing after due date of payment.</li>
+        <li>Payment Terms 10 Days.</li>
+        <li>Subject to Ahmedabad Jurisdiction</li>
+        <li>E. &amp; O.E.</li>
+      </ol>
+    </div>
+    <div class="sign"><div class="for">For, Jay Chamunda<br>Engineering Works</div></div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+  const KEY = "jcew-invoice-draft";
+  const rowsEl = document.getElementById("rows");
+  let rowCount = 14;
+
+  // Party GSTIN 15 boxes
+  const gb = document.getElementById("gstinBoxes");
+  for(let i=0;i<15;i++){
+    const inp=document.createElement("input");
+    inp.maxLength=1; inp.dataset.k="pg"+i; inp.setAttribute("aria-label","Party GSTIN character "+(i+1));
+    inp.addEventListener("input",()=>{ if(inp.value && inp.nextElementSibling) inp.nextElementSibling.focus(); });
+    inp.addEventListener("keydown",e=>{ if(e.key==="Backspace" && !inp.value && inp.previousElementSibling) inp.previousElementSibling.focus(); });
+    gb.appendChild(inp);
+  }
+
+  function makeRow(i){
+    const tr=document.createElement("tr");
+    tr.innerHTML=
+      `<td class="ctr"><input data-k="r${i}sr"></td>`+
+      `<td><input data-k="r${i}desc"></td>`+
+      `<td class="ctr"><input data-k="r${i}hsn"></td>`+
+      `<td class="num"><input data-k="r${i}qty" inputmode="decimal"></td>`+
+      `<td class="num"><input data-k="r${i}rate" inputmode="decimal"></td>`+
+      `<td class="ctr"><input data-k="r${i}per"></td>`+
+      `<td class="num"><input data-k="r${i}rs" inputmode="numeric"></td>`+
+      `<td class="num"><input data-k="r${i}ps" inputmode="numeric" maxlength="2"></td>`;
+    return tr;
+  }
+  function buildRows(){ rowsEl.innerHTML=""; for(let i=0;i<rowCount;i++) rowsEl.appendChild(makeRow(i)); }
+
+  const num = v => { const n=parseFloat(String(v||"").replace(/,/g,"")); return isNaN(n)?0:n; };
+  const fmtIN = n => Math.floor(n).toLocaleString("en-IN");
+  function setSplit(id,val,show){
+    const rs=document.getElementById(id+"Rs"), ps=document.getElementById(id+"Ps");
+    if(!show){ rs.textContent=""; ps.textContent=""; return; }
+    const neg = val<0; const a=Math.abs(val);
+    let r=Math.floor(a), p=Math.round((a-r)*100); if(p===100){r++;p=0;}
+    rs.textContent=(neg?"-":"")+r.toLocaleString("en-IN")+" "; ps.textContent=String(p).padStart(2,"0")+" ";
+  }
+
+  // Indian number to words
+  const ones=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+  const tens=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+  function two(n){ return n<20?ones[n]:tens[Math.floor(n/10)]+(n%10?" "+ones[n%10]:""); }
+  function three(n){ const h=Math.floor(n/100), r=n%100; return (h?ones[h]+" Hundred"+(r?" ":""):"")+(r?two(r):""); }
+  function words(n){
+    if(n===0) return "Zero";
+    let out=[]; const cr=Math.floor(n/10000000); n%=10000000;
+    const lk=Math.floor(n/100000); n%=100000; const th=Math.floor(n/1000); n%=1000;
+    if(cr) out.push(words(cr)+" Crore"); if(lk) out.push(two(lk)+" Lakh"); if(th) out.push(two(th)+" Thousand"); if(n) out.push(three(n));
+    return out.join(" ");
+  }
+
+  function q(k){ const el=document.querySelector(`[data-k="${k}"]`); return el?el.value:""; }
+  function setQ(k,v){ const el=document.querySelector(`[data-k="${k}"]`); if(el) el.value=v; }
+
+  function recalc(src){
+    let sub=0, any=false;
+    for(let i=0;i<rowCount;i++){
+      const qty=q(`r${i}qty`), rate=q(`r${i}rate`);
+      const rsEl=document.querySelector(`[data-k="r${i}rs"]`);
+      const psEl=document.querySelector(`[data-k="r${i}ps"]`);
+      const manual = src && (src===rsEl || src===psEl);
+      if(!manual && qty!=="" && rate!==""){
+        const amt=Math.round(num(qty)*num(rate)*100)/100;
+        rsEl.value=fmtIN(amt); psEl.value=String(Math.round((amt-Math.floor(amt))*100)).padStart(2,"0");
+      }
+      if(rsEl.value!==""||psEl.value!==""){ any=true; sub+=num(rsEl.value)+num(psEl.value)/100; }
+      const srEl=document.querySelector(`[data-k="r${i}sr"]`);
+      if(q(`r${i}desc`)!=="" && srEl.value==="") srEl.value=String(i+1);
+    }
+    const other=num(q("other")); if(q("other")!=="") any=true;
+    const tb=sub+other;
+    const cg=tb*num(q("cgstP"))/100, sg=tb*num(q("sgstP"))/100, ig=tb*num(q("igstP"))/100;
+    const raw=tb+cg+sg+ig, gt=Math.round(raw), ro=gt-raw;
+    setSplit("tb",tb,any);
+    setSplit("cg",cg,any && q("cgstP")!=="");
+    setSplit("sg",sg,any && q("sgstP")!=="");
+    setSplit("ig",ig,any && q("igstP")!=="");
+    setSplit("ro",ro,any && Math.abs(ro)>0.0001);
+    setSplit("gt",gt,any);
+    document.getElementById("inWords").textContent = any ? words(gt)+" Only" : "";
+  }
+
+  function save(){
+    const data={rowCount};
+    document.querySelectorAll("[data-k]").forEach(el=>{ data[el.dataset.k]= el.type==="checkbox"?el.checked:el.value; });
+    try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){}
+  }
+  function load(){
+    let data=null;
+    try{ data=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){}
+    if(data && data.rowCount) rowCount=data.rowCount;
+    buildRows();
+    if(data){ document.querySelectorAll("[data-k]").forEach(el=>{ const v=data[el.dataset.k]; if(v===undefined) return; if(el.type==="checkbox") el.checked=v; else el.value=v; }); }
+    recalc();
+  }
+
+  document.addEventListener("input",e=>{ if(e.target.dataset && e.target.dataset.k){ recalc(e.target); save(); } });
+  document.addEventListener("change",e=>{ if(e.target.type==="checkbox") save(); });
+
+  // ---------- fit invoice to phone screen ----------
+  const scaler=document.getElementById("scaler"), page=document.getElementById("page");
+  let zoomed=false;
+  function fit(){
+    const avail=document.querySelector(".scroller").clientWidth-16;
+    const w=page.offsetWidth, h=page.offsetHeight;
+    const sc= zoomed ? Math.min(1, Math.max(avail/w, 0.8)) : Math.min(1, avail/w);
+    scaler.style.transform="scale("+sc+")";
+    scaler.style.width=(w*sc)+"px"; scaler.style.height=(h*sc)+"px";
+    document.getElementById("zoomBtn").textContent = zoomed ? "Fit screen" : "Zoom in";
+  }
+  window.addEventListener("resize",fit);
+  document.getElementById("zoomBtn").onclick=()=>{ zoomed=!zoomed; fit(); };
+  new ResizeObserver(fit).observe(page);
+
+  // ---------- toast ----------
+  const toast=document.getElementById("toast"); let tTimer;
+  function say(html,ms){ toast.innerHTML=html; toast.style.display="block"; clearTimeout(tTimer); if(ms!==0) tTimer=setTimeout(()=>toast.style.display="none",ms||3500); }
+
+  // ---------- customer phone ----------
+  const phone=document.getElementById("custPhone");
+  try{ phone.value=localStorage.getItem(KEY+"-phone")||""; }catch(e){}
+  phone.addEventListener("input",()=>{ try{ localStorage.setItem(KEY+"-phone",phone.value); }catch(e){} });
+  function waNumber(){
+    let d=(phone.value||"").replace(/\D/g,"");
+    if(d.length===10) d="91"+d;
+    if(d.length===11 && d[0]==="0") d="91"+d.slice(1);
+    return d;
+  }
+
+  // ---------- PDF ----------
+  function fileName(){
+    const inv=(q("invNo")||"").replace(/[^\w-]+/g,"").slice(0,20);
+    return "Invoice"+(inv?"-"+inv:"")+"-JayChamunda.pdf";
+  }
+  async function makePdf(){
+    if(!window.html2canvas || !window.jspdf) throw new Error("libs");
+    const holders=[...page.querySelectorAll("input[placeholder]")];
+    const saved=holders.map(i=>i.placeholder); holders.forEach(i=>i.placeholder="");
+    if(document.activeElement) document.activeElement.blur();
+    const prevT=scaler.style.transform; scaler.style.transform="none";
+    try{
+      const canvas=await html2canvas(page,{scale:2,backgroundColor:"#ffffff",useCORS:true,windowWidth:page.scrollWidth});
+      const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
+      const img=canvas.toDataURL("image/jpeg",0.92);
+      const pw=210, ph=canvas.height*pw/canvas.width;
+      pdf.addImage(img,"JPEG",0,0,pw,Math.min(ph,297));
+      return pdf.output("blob");
+    } finally {
+      scaler.style.transform=prevT; holders.forEach((i,k)=>i.placeholder=saved[k]);
+    }
+  }
+  const NATIVE = window.AndroidApp || null;
+  function b64(blob){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(String(r.result).split(",")[1]); r.onerror=rej; r.readAsDataURL(blob); }); }
+  async function savePdf(blob){
+    if(NATIVE){ NATIVE.savePdf(await b64(blob), fileName()); return true; }
+    const dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null;
+    if(dl){ await dl.save({filename:fileName(),data:blob}); return true; }
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fileName(); a.click();
+    return true;
+  }
+  function busy(btn,on,label){ btn.disabled=on; if(label) btn.textContent=label; }
+
+  document.getElementById("pdfBtn").onclick=async e=>{
+    const b=e.currentTarget; busy(b,true,"Making…");
+    try{ const blob=await makePdf(); await savePdf(blob); say("PDF saved."); }
+    catch(err){ if(!(err&&err.code==="declined")) say("Could not save the PDF. Please try again."); }
+    finally{ busy(b,false,"Save PDF"); }
+  };
+
+  document.getElementById("waBtn").onclick=async e=>{
+    const b=e.currentTarget; busy(b,true,"Preparing…");
+    const gt=document.getElementById("gtRs").textContent.trim();
+    const msg="Dear "+(q("ms1")||"Customer")+",\nPlease find attached Tax Invoice"+(q("invNo")?" No. "+q("invNo"):"")+
+      (gt?" for Rs. "+gt+"/-":"")+".\n\nThank you,\nJay Chamunda Engineering Works\nM. 9913715414 / 9426338689";
+    try{
+      const blob=await makePdf();
+      if(NATIVE){ NATIVE.shareWhatsApp(await b64(blob), fileName(), waNumber(), msg); return; }
+      const file=new File([blob],fileName(),{type:"application/pdf"});
+      // 1) Phone share sheet: pick WhatsApp, PDF goes attached
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        try{ await navigator.share({files:[file],text:msg}); say("Shared."); return; }
+        catch(err){ if(err && err.name==="AbortError") return; }
+      }
+      // 2) Fallback: save PDF, then open the customer's WhatsApp chat
+      try{ await savePdf(blob); }catch(err){ if(err&&err.code==="declined") return; }
+      const n=waNumber();
+      const url="https://wa.me/"+(n||"")+"?text="+encodeURIComponent(msg);
+      const w=window.open(url,"_blank","noopener");
+      say('PDF saved. '+(w?'WhatsApp opened – attach the PDF in the chat.':'<a href="'+url+'" target="_blank" rel="noopener">Open WhatsApp</a> and attach the saved PDF.'),w?5000:0);
+    }catch(err){ say("Could not make the PDF. Please try again."); }
+    finally{ busy(b,false,"Send on WhatsApp"); }
+  };
+
+  document.getElementById("printBtn").onclick=()=>{ if(NATIVE){ NATIVE.print(); return; } try{ window.print(); }catch(e){ say("Printing isn't available here – tap Save PDF and print the PDF."); } };
+  document.getElementById("addRow").onclick=()=>{ rowsEl.appendChild(makeRow(rowCount)); rowCount++; save(); };
+  document.getElementById("removeRow").onclick=()=>{ if(rowCount>1){ rowsEl.lastElementChild.remove(); rowCount--; recalc(); save(); } };
+  document.getElementById("clearBtn").onclick=()=>{
+    if(!confirm("Clear all details and start a new bill?")) return;
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    rowCount=14; buildRows();
+    document.querySelectorAll("[data-k]").forEach(el=>{ if(el.type==="checkbox") el.checked=false; else el.value=""; });
+    recalc();
+  };
+
+  load();
+  fit();
+})();
+</script>
+</body>
+</html>
