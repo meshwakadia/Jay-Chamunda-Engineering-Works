@@ -197,22 +197,63 @@ table{border-collapse:collapse;width:100%}
 .history-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:none;align-items:center;justify-content:center;padding:12px}
 .history-modal.open{display:flex}
 .history-modal-content{background:#fff;border-radius:14px;max-width:520px;width:100%;height:90vh;max-height:680px;box-shadow:0 12px 35px rgba(0,0,0,.4);overflow:hidden;display:flex;flex-direction:column}
-.history-modal-header{padding:12px 16px;background:#1f3c88;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.history-modal-header{padding:12px 16px;background:#1f3c88;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .hm-title-wrap{display:flex;align-items:center;gap:10px}
 .hm-title-wrap h3{margin:0;font-size:16px;font-weight:700}
 .hm-count{background:rgba(255,255,255,.2);font-size:12px;padding:2px 8px;border-radius:12px;font-weight:600}
 .history-modal-close{background:transparent;border:none;color:#fff;font-size:24px;line-height:1;cursor:pointer;padding:0 4px}
 
-.history-search-row{padding:10px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;position:relative}
+/* History Modal Tabs */
+.hm-tabs{display:flex;background:#e2e8f0;padding:4px;gap:4px;border-bottom:1px solid #cbd5e1;flex-shrink:0}
+.hm-tab{flex:1;padding:8px 6px;border:none;background:transparent;font-size:12.5px;font-weight:700;color:#475569;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.hm-tab.active{background:#fff;color:#1f3c88;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.hm-tab-badge{background:#e2e8f0;color:#334155;font-size:11px;padding:1px 6px;border-radius:10px;font-weight:800}
+.hm-tab.active .hm-tab-badge{background:#1f3c88;color:#fff}
+
+.history-search-row{padding:10px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;position:relative;flex-shrink:0}
 .history-search-row input{flex:1;font-size:14px;padding:8px 32px 8px 12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#1e293b}
 .history-search-row input:focus{border-color:#1f3c88;outline:none;background:#fff}
 .btn-clear-search{position:absolute;right:22px;background:none;border:none;color:#94a3b8;font-size:14px;cursor:pointer;padding:4px;display:none}
 
-.history-quick-bar{padding:8px 14px;background:#f1f5f9;border-bottom:1px solid #e2e8f0;display:flex;gap:8px;align-items:center;justify-content:space-between}
+.history-quick-bar{padding:8px 14px;background:#f1f5f9;border-bottom:1px solid #e2e8f0;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-shrink:0}
 .btn-hm-new{background:#25d366;border:1px solid #25d366;color:#fff;padding:6px 12px;font-size:12.5px;font-weight:700;border-radius:6px;cursor:pointer}
 .btn-hm-backup{background:#fff;border:1px solid #64748b;color:#475569;padding:6px 10px;font-size:12px;font-weight:600;border-radius:6px;cursor:pointer}
 
-.history-list{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:#f8fafc}
+/* Client Folders View */
+.clients-view{flex:1;overflow-y:auto;display:flex;flex-direction:column;background:#f8fafc;min-height:0}
+.clients-list{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.client-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;box-shadow:0 2px 5px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:8px}
+.client-card:hover{border-color:#1f3c88;transform:translateY(-1px);box-shadow:0 4px 12px rgba(31,60,136,.12)}
+.cc-header{display:flex;align-items:center;gap:10px}
+.cc-avatar{width:38px;height:38px;border-radius:8px;background:#eff6ff;color:#1f3c88;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1px solid #bfdbfe}
+.cc-info{flex:1;min-width:0}
+.cc-name{font-size:14.5px;font-weight:800;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-meta{display:flex;gap:8px;font-size:11.5px;color:#64748b;margin-top:2px;flex-wrap:wrap}
+.cc-arrow{font-size:15px;color:#94a3b8;font-weight:700;padding-left:4px}
+.cc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px dashed #e2e8f0;font-size:12px;gap:6px;flex-wrap:wrap}
+.cc-badge-count{background:#eff6ff;color:#1e40af;font-weight:700;padding:2px 8px;border-radius:6px;font-size:11.5px;border:1px solid #dbeafe}
+.cc-badge-total{color:#047857;font-weight:800;font-size:13.5px}
+.cc-date{color:#64748b;font-size:11.5px}
+
+/* Client Folder View (inside a single client) */
+.client-folder-view{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.client-folder-header{padding:10px 14px;background:#fff;border-bottom:1.5px solid #e2e8f0;display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.cf-top-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.btn-cf-back{background:#f1f5f9;border:1px solid #cbd5e1;color:#334155;font-size:12px;font-weight:700;padding:6px 10px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.btn-cf-back:hover{background:#e2e8f0;color:#0f172a}
+.btn-cf-newbill{background:#25d366;border:1px solid #16a34a;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.btn-cf-newbill:hover{background:#1ebc59}
+.cf-card-hero{background:#f8fafc;border-radius:8px;padding:8px 10px;border-left:4px solid #1f3c88;display:flex;flex-direction:column;gap:4px}
+.cf-hero-title{display:flex;align-items:center;gap:6px}
+.cf-hero-icon{font-size:16px}
+.cf-hero-name{font-size:15px;font-weight:800;color:#0f172a}
+.cf-hero-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:2px}
+.cf-meta-pill{font-size:11.5px;color:#475569;background:#fff;padding:2px 7px;border-radius:5px;border:1px solid #e2e8f0}
+.cf-pill-bills{background:#eff6ff;color:#1e40af;font-weight:700;border-color:#bfdbfe}
+.cf-pill-total{background:#ecfdf5;color:#047857;font-weight:800;border-color:#a7f3d0}
+
+/* Bills list (Flat & Inside Client) */
+.history-list{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:#f8fafc;min-height:0}
 .bill-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:8px;transition:all .15s}
 .bill-card:hover{border-color:#93c5fd;box-shadow:0 4px 12px rgba(31,60,136,.08)}
 .bill-card.active-bill-card{border:2px solid #0d9488;background:#f0fdfa}
@@ -314,8 +355,18 @@ table{border-collapse:collapse;width:100%}
       <button type="button" class="history-modal-close" id="btnCloseHistoryModal">&times;</button>
     </div>
 
+    <!-- Mode Tabs: Client Folders vs All Bills -->
+    <div class="hm-tabs">
+      <button type="button" class="hm-tab active" id="tabHmClients">
+        🏢 By Clients / પાર્ટીવાર <span class="hm-tab-badge" id="hmClientsBadge">0</span>
+      </button>
+      <button type="button" class="hm-tab" id="tabHmAll">
+        📑 All Bills / બધા બિલો <span class="hm-tab-badge" id="hmAllBadge">0</span>
+      </button>
+    </div>
+
     <div class="history-search-row">
-      <input type="text" id="historySearchInput" placeholder="🔍 Search by Customer Name or Bill No...">
+      <input type="text" id="historySearchInput" placeholder="🔍 Search client name or phone...">
       <button type="button" id="btnClearSearch" class="btn-clear-search">✕</button>
     </div>
 
@@ -328,8 +379,18 @@ table{border-collapse:collapse;width:100%}
       </div>
     </div>
 
-    <!-- Bills List Container -->
-    <div class="history-list" id="historyList"></div>
+    <!-- Client Folders Container -->
+    <div class="clients-view" id="clientsView">
+      <div class="clients-list" id="clientsList"></div>
+      
+      <div class="client-folder-view" id="clientFolderView" style="display:none">
+        <div class="client-folder-header" id="clientFolderHeader"></div>
+        <div class="history-list" id="clientBillsList"></div>
+      </div>
+    </div>
+
+    <!-- All Bills Flat List Container -->
+    <div class="history-list" id="historyList" style="display:none"></div>
   </div>
 </div>
 
@@ -411,7 +472,7 @@ table{border-collapse:collapse;width:100%}
     <div class="left-top">
       <div class="gst">GSTIN : 24AYAPK3398M1Z2</div>
       <div class="ms">
-        <div class="line"><span>M/s.</span><input data-k="ms1"></div>
+        <div class="line"><span>M/s.</span><input data-k="ms1" list="clientsDatalist" autocomplete="off"><datalist id="clientsDatalist"></datalist></div>
         <div class="line"><input data-k="ms2"></div>
         <div class="line"><input data-k="ms3"></div>
       </div>
@@ -608,6 +669,87 @@ table{border-collapse:collapse;width:100%}
   function saveAllBills(bills){
     try{ localStorage.setItem(BILLS_KEY, JSON.stringify(bills)); }catch(e){}
     updateHistoryBadge();
+    updateClientsDatalist();
+  }
+
+  function getBillClientName(b){
+    if(b.data && b.data.ms1 && b.data.ms1.trim()) return b.data.ms1.trim();
+    if(b.partyName && b.partyName.trim()) return b.partyName.trim();
+    return "";
+  }
+
+  function extractGstin(data){
+    if(!data) return "";
+    let g = "";
+    for(let i=0; i<15; i++){
+      g += (data["pg" + i] || "");
+    }
+    return g.trim();
+  }
+
+  function formatRs(n){
+    if(!n && n !== 0) return "0";
+    return Number(n).toLocaleString("en-IN", {maximumFractionDigits: 2});
+  }
+
+  function groupBillsByClient(bills){
+    const map = new Map();
+    bills.forEach(bill => {
+      const rawName = getBillClientName(bill);
+      const key = rawName ? rawName.toLowerCase() : "__unnamed__";
+      if (!map.has(key)) {
+        map.set(key, {
+          key: key,
+          name: rawName || "Walk-in Customer / અન્ય ગ્રાહક",
+          isUnnamed: !rawName,
+          bills: [],
+          totalAmount: 0,
+          latestDate: bill.invDt || "",
+          latestTimestamp: bill.updatedAt || bill.createdAt || 0,
+          phone: bill.phone || (bill.data && bill.data.custPhone) || "",
+          address: (bill.data && bill.data.ms2) || "",
+          state: (bill.data && bill.data.state) || "",
+          stateCode: (bill.data && bill.data.stateCode) || "",
+          gstin: extractGstin(bill.data)
+        });
+      }
+      const c = map.get(key);
+      c.bills.push(bill);
+      const amt = (typeof bill.grandTotalNum === "number" && !isNaN(bill.grandTotalNum)) ? bill.grandTotalNum : num(bill.grandTotal);
+      c.totalAmount += (amt || 0);
+      const ts = bill.updatedAt || bill.createdAt || 0;
+      if (ts >= c.latestTimestamp) {
+        c.latestTimestamp = ts;
+        if (bill.invDt) c.latestDate = bill.invDt;
+        if (bill.phone) c.phone = bill.phone;
+        if (bill.data && bill.data.ms2) c.address = bill.data.ms2;
+        if (bill.data && bill.data.state) c.state = bill.data.state;
+        if (bill.data && bill.data.stateCode) c.stateCode = bill.data.stateCode;
+        const g = extractGstin(bill.data);
+        if (g) c.gstin = g;
+      }
+    });
+
+    const clients = Array.from(map.values());
+    clients.sort((a, b) => b.latestTimestamp - a.latestTimestamp);
+    clients.forEach(c => {
+      c.bills.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+    });
+    return clients;
+  }
+
+  function updateClientsDatalist(){
+    const dl = document.getElementById("clientsDatalist");
+    if(!dl) return;
+    const bills = getAllBills();
+    const clients = groupBillsByClient(bills);
+    let optionsHtml = "";
+    clients.forEach(c => {
+      if(!c.isUnnamed && c.name){
+        optionsHtml += `<option value="${escapeHtml(c.name)}">${escapeHtml(c.phone ? c.phone + ' • ' : '')}${c.bills.length} bills</option>`;
+      }
+    });
+    dl.innerHTML = optionsHtml;
   }
 
   function updateHistoryBadge(){
@@ -617,6 +759,12 @@ table{border-collapse:collapse;width:100%}
     if(badge) badge.textContent = count;
     const modalCount = document.getElementById("historyModalCount");
     if(modalCount) modalCount.textContent = count + (count === 1 ? " Bill" : " Bills");
+    
+    const clients = groupBillsByClient(bills);
+    const hmClientsBadge = document.getElementById("hmClientsBadge");
+    if(hmClientsBadge) hmClientsBadge.textContent = clients.length;
+    const hmAllBadge = document.getElementById("hmAllBadge");
+    if(hmAllBadge) hmAllBadge.textContent = count;
   }
 
   function extractCurrentBillData(){
@@ -636,7 +784,7 @@ table{border-collapse:collapse;width:100%}
     }
     const invNo = (q("invNo") || "").trim();
     const invDt = (q("invDt") || "").trim();
-    const partyName = [q("ms1"), q("ms2")].map(s=>(s||"").trim()).filter(Boolean).join(" ") || (q("ms1") || "").trim();
+    const partyName = (q("ms1") || "").trim() || (q("ms2") || "").trim();
     const phoneVal = (phone.value || "").trim();
     const place = (q("place") || "").trim();
     const gtEl = document.querySelector('[data-k="gtRs"]');
@@ -757,6 +905,7 @@ table{border-collapse:collapse;width:100%}
     recalc();
     loadSignature();
     updateHistoryBadge();
+    updateClientsDatalist();
   }
 
   document.addEventListener("input",e=>{ if(e.target.dataset && e.target.dataset.k){ recalc(e.target); save(); } });
@@ -1068,11 +1217,8 @@ table{border-collapse:collapse;width:100%}
   btnCancelNewBill.onclick = ()=>{
     newBillModal.classList.remove("open");
   };
-  btnConfirmNewBill.onclick = ()=>{
-    // 1. Auto-save current bill to history first
+  function startNewBlankBill(prefillClient = null){
     saveCurrentBillToHistory(true);
-
-    // 2. Clear current draft
     try{ localStorage.removeItem(KEY); localStorage.removeItem(KEY + "-active-id"); }catch(e){}
     currentBillId = null;
     rowCount = 14;
@@ -1082,7 +1228,6 @@ table{border-collapse:collapse;width:100%}
       else el.value = "";
     });
 
-    // 3. Smart suggestion for next invoice number:
     const bills = getAllBills();
     let maxInv = 0;
     bills.forEach(b => {
@@ -1094,9 +1239,45 @@ table{border-collapse:collapse;width:100%}
       if(invInput) invInput.value = String(maxInv + 1);
     }
     const dtInput = document.querySelector('[data-k="invDt"]');
-    if(dtInput && !dtInput.value) dtInput.value = todayStr();
+    if(dtInput) dtInput.value = todayStr();
+
+    if(prefillClient){
+      if(prefillClient.name && !prefillClient.isUnnamed){
+        const ms1El = document.querySelector('[data-k="ms1"]');
+        if(ms1El) ms1El.value = prefillClient.name;
+      }
+      if(prefillClient.address){
+        const ms2El = document.querySelector('[data-k="ms2"]');
+        if(ms2El) ms2El.value = prefillClient.address;
+      }
+      if(prefillClient.phone){
+        phone.value = prefillClient.phone;
+        try{ localStorage.setItem(KEY + "-phone", prefillClient.phone); }catch(e){}
+      }
+      if(prefillClient.state){
+        const stEl = document.querySelector('[data-k="state"]');
+        if(stEl) stEl.value = prefillClient.state;
+      }
+      if(prefillClient.stateCode){
+        const scEl = document.querySelector('[data-k="stateCode"]');
+        if(scEl) scEl.value = prefillClient.stateCode;
+      }
+      if(prefillClient.gstin){
+        const cleanG = prefillClient.gstin.trim();
+        for(let i=0; i<cleanG.length && i<15; i++){
+          const gEl = document.querySelector(`[data-k="pg${i}"]`);
+          if(gEl) gEl.value = cleanG[i];
+        }
+      }
+    }
 
     recalc();
+    save();
+    updateClientsDatalist();
+  }
+
+  btnConfirmNewBill.onclick = ()=>{
+    startNewBlankBill();
     newBillModal.classList.remove("open");
     say("✨ New bill opened! Previous bill safely saved in Saved Bills.");
   };
@@ -1176,13 +1357,307 @@ table{border-collapse:collapse;width:100%}
   const historySearchInput = document.getElementById("historySearchInput");
   const btnClearSearch = document.getElementById("btnClearSearch");
 
+  let activeHmTab = "clients";
+  let selectedClientKey = null;
+
+  function generateBillCardHtml(b, isCurrent = false){
+    const invLabel = b.invNo ? `#${b.invNo}` : "Draft";
+    const dateLabel = b.invDt || "No date";
+    const party = b.partyName || "Unnamed Customer";
+    const amt = b.grandTotal ? `₹ ${b.grandTotal}` : "₹ 0";
+    const dtFormatted = new Date(b.updatedAt || b.createdAt || Date.now()).toLocaleDateString("en-IN", {
+      day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
+    });
+
+    return `
+      <div class="bill-card ${isCurrent ? 'active-bill-card' : ''}" data-id="${b.id}">
+        <div class="bc-top">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="bc-inv-badge">${invLabel}</span>
+            ${isCurrent ? '<span style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:4px;font-weight:700">CURRENT</span>' : ''}
+            <span class="bc-date">📅 ${dateLabel}</span>
+          </div>
+          <div class="bc-amount">${amt}</div>
+        </div>
+        <div class="bc-party">👤 ${escapeHtml(party)}</div>
+        <div class="bc-sub">
+          ${b.phone ? `<span>📱 ${escapeHtml(b.phone)}</span>` : ""}
+          ${b.itemsSummary ? `<span>📦 ${escapeHtml(b.itemsSummary)}</span>` : ""}
+          <span>🕒 Saved: ${dtFormatted}</span>
+        </div>
+        <div class="bc-actions">
+          <button type="button" class="bc-btn bc-open" data-act="open" data-id="${b.id}">👁️ Open & Edit</button>
+          <button type="button" class="bc-btn bc-pdf" data-act="pdf" data-id="${b.id}">📄 PDF</button>
+          <button type="button" class="bc-btn bc-wa" data-act="wa" data-id="${b.id}">💬 WhatsApp</button>
+          <button type="button" class="bc-btn bc-del" data-act="delete" data-id="${b.id}" title="Delete bill">🗑️</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderHistoryList(filterQuery = ""){
+    const bills = getAllBills();
+    const listEl = document.getElementById("historyList");
+    if(!listEl) return;
+    
+    let filtered = bills;
+    const qStr = (filterQuery || "").trim().toLowerCase();
+    if(qStr){
+      filtered = bills.filter(b => {
+        return (b.invNo && b.invNo.toLowerCase().includes(qStr)) ||
+               (b.partyName && b.partyName.toLowerCase().includes(qStr)) ||
+               (b.phone && b.phone.includes(qStr)) ||
+               (b.invDt && b.invDt.includes(qStr)) ||
+               (b.itemsSummary && b.itemsSummary.toLowerCase().includes(qStr));
+      });
+    }
+
+    if(filtered.length === 0){
+      if(bills.length === 0){
+        listEl.innerHTML = `
+          <div class="history-empty">
+            <div class="he-icon">📑</div>
+            <div class="he-title">No Saved Bills Yet / કોઈ બિલ સેવ નથી</div>
+            <div class="he-desc">Whenever you save a PDF, share on WhatsApp, or tap <strong>Save Bill</strong>, your bills will stay saved here permanently!</div>
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = `
+          <div class="history-empty">
+            <div class="he-icon">🔍</div>
+            <div class="he-title">No matching bills found</div>
+            <div class="he-desc">Try searching with a different customer name or invoice number.</div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    let htmlCards = "";
+    filtered.forEach(b => {
+      const isCurrent = currentBillId === b.id;
+      htmlCards += generateBillCardHtml(b, isCurrent);
+    });
+    listEl.innerHTML = htmlCards;
+  }
+
+  function renderClientsList(filterQuery = ""){
+    const bills = getAllBills();
+    const listEl = document.getElementById("clientsList");
+    if(!listEl) return;
+
+    const clients = groupBillsByClient(bills);
+    let filtered = clients;
+    const qStr = (filterQuery || "").trim().toLowerCase();
+    if(qStr){
+      filtered = clients.filter(c => {
+        return c.name.toLowerCase().includes(qStr) ||
+               (c.phone && c.phone.includes(qStr)) ||
+               (c.gstin && c.gstin.toLowerCase().includes(qStr));
+      });
+    }
+
+    if(filtered.length === 0){
+      if(clients.length === 0){
+        listEl.innerHTML = `
+          <div class="history-empty">
+            <div class="he-icon">🏢</div>
+            <div class="he-title">No Client Folders Yet / કોઈ પાર્ટી સેવ નથી</div>
+            <div class="he-desc">When you create bills for different customers (Client A, Client B...), each client's company folder will appear here with all their bills organized!</div>
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = `
+          <div class="history-empty">
+            <div class="he-icon">🔍</div>
+            <div class="he-title">No matching client found</div>
+            <div class="he-desc">No client matches "<strong>${escapeHtml(filterQuery)}</strong>".</div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    let htmlCards = "";
+    filtered.forEach(c => {
+      const billCount = c.bills.length;
+      const countLabel = billCount === 1 ? "1 Bill" : `${billCount} Bills`;
+      const lastDt = c.latestDate ? `📅 ${c.latestDate}` : "";
+
+      htmlCards += `
+        <div class="client-card" data-ckey="${escapeHtml(c.key)}">
+          <div class="cc-header">
+            <div class="cc-avatar">🏢</div>
+            <div class="cc-info">
+              <div class="cc-name">${escapeHtml(c.name)}</div>
+              <div class="cc-meta">
+                ${c.phone ? `<span>📱 ${escapeHtml(c.phone)}</span>` : ""}
+                ${c.gstin ? `<span>🆔 ${escapeHtml(c.gstin)}</span>` : ""}
+              </div>
+            </div>
+            <div class="cc-arrow">➔</div>
+          </div>
+          <div class="cc-footer">
+            <span class="cc-badge-count">📁 ${countLabel}</span>
+            <span class="cc-badge-total">₹ ${formatRs(c.totalAmount)}</span>
+            <span class="cc-date">${lastDt}</span>
+          </div>
+        </div>
+      `;
+    });
+    listEl.innerHTML = htmlCards;
+  }
+
+  function renderClientFolder(ckey, filterQuery = ""){
+    const bills = getAllBills();
+    const clients = groupBillsByClient(bills);
+    const client = clients.find(c => c.key === ckey);
+    if(!client){
+      backToClientsList();
+      return;
+    }
+
+    const headerEl = document.getElementById("clientFolderHeader");
+    const billsListEl = document.getElementById("clientBillsList");
+    if(!headerEl || !billsListEl) return;
+
+    headerEl.innerHTML = `
+      <div class="cf-top-bar">
+        <button type="button" class="btn-cf-back" id="btnBackToClients">⬅ All Clients / બધા ગ્રાહકો</button>
+        <button type="button" class="btn-cf-newbill" id="btnNewBillForClient">➕ New Bill for this Party</button>
+      </div>
+      <div class="cf-card-hero">
+        <div class="cf-hero-title">
+          <span class="cf-hero-icon">🏢</span>
+          <span class="cf-hero-name">${escapeHtml(client.name)}</span>
+        </div>
+        <div class="cf-hero-meta">
+          ${client.phone ? `<span class="cf-meta-pill">📱 ${escapeHtml(client.phone)}</span>` : ""}
+          ${client.gstin ? `<span class="cf-meta-pill">🆔 ${escapeHtml(client.gstin)}</span>` : ""}
+          <span class="cf-meta-pill cf-pill-bills">📑 ${client.bills.length} ${client.bills.length === 1 ? 'Bill' : 'Bills'}</span>
+          <span class="cf-meta-pill cf-pill-total">💰 Total: ₹ ${formatRs(client.totalAmount)}</span>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("btnBackToClients").onclick = backToClientsList;
+    document.getElementById("btnNewBillForClient").onclick = ()=>{
+      startNewBlankBill(client);
+      closeHistoryModal();
+      say(`✨ New bill opened for ${client.name}!`);
+    };
+
+    let clientBills = client.bills;
+    const qStr = (filterQuery || "").trim().toLowerCase();
+    if(qStr){
+      clientBills = clientBills.filter(b => {
+        return (b.invNo && b.invNo.toLowerCase().includes(qStr)) ||
+               (b.invDt && b.invDt.includes(qStr)) ||
+               (b.itemsSummary && b.itemsSummary.toLowerCase().includes(qStr));
+      });
+    }
+
+    if(clientBills.length === 0){
+      billsListEl.innerHTML = `
+        <div class="history-empty">
+          <div class="he-icon">🔍</div>
+          <div class="he-title">No matching bills</div>
+          <div class="he-desc">No bills for this client match "<strong>${escapeHtml(filterQuery)}</strong>".</div>
+        </div>
+      `;
+      return;
+    }
+
+    let htmlCards = "";
+    clientBills.forEach(b => {
+      const isCurrent = currentBillId === b.id;
+      htmlCards += generateBillCardHtml(b, isCurrent);
+    });
+    billsListEl.innerHTML = htmlCards;
+  }
+
+  function openClientFolder(ckey){
+    selectedClientKey = ckey;
+    document.getElementById("clientsList").style.display = "none";
+    document.getElementById("clientFolderView").style.display = "flex";
+    historySearchInput.value = "";
+    historySearchInput.placeholder = "🔍 Search bills of this client...";
+    btnClearSearch.style.display = "none";
+    renderClientFolder(ckey, "");
+  }
+
+  function backToClientsList(){
+    selectedClientKey = null;
+    document.getElementById("clientFolderView").style.display = "none";
+    document.getElementById("clientsList").style.display = "flex";
+    historySearchInput.value = "";
+    historySearchInput.placeholder = "🔍 Search client name or phone...";
+    btnClearSearch.style.display = "none";
+    renderClientsList("");
+  }
+
+  function switchHmTab(tab){
+    activeHmTab = tab;
+    historySearchInput.value = "";
+    btnClearSearch.style.display = "none";
+    if(tab === "clients"){
+      document.getElementById("tabHmClients").classList.add("active");
+      document.getElementById("tabHmAll").classList.remove("active");
+      document.getElementById("clientsView").style.display = "flex";
+      document.getElementById("historyList").style.display = "none";
+      if(selectedClientKey){
+        document.getElementById("clientsList").style.display = "none";
+        document.getElementById("clientFolderView").style.display = "flex";
+        historySearchInput.placeholder = "🔍 Search bills of this client...";
+        renderClientFolder(selectedClientKey, "");
+      } else {
+        document.getElementById("clientsList").style.display = "flex";
+        document.getElementById("clientFolderView").style.display = "none";
+        historySearchInput.placeholder = "🔍 Search client name or phone...";
+        renderClientsList("");
+      }
+    } else {
+      document.getElementById("tabHmAll").classList.add("active");
+      document.getElementById("tabHmClients").classList.remove("active");
+      document.getElementById("clientsView").style.display = "none";
+      document.getElementById("historyList").style.display = "flex";
+      historySearchInput.placeholder = "🔍 Search by Customer Name or Bill No...";
+      renderHistoryList("");
+    }
+    updateHistoryBadge();
+  }
+
+  function renderHistoryView(){
+    updateHistoryBadge();
+    updateClientsDatalist();
+    const q = historySearchInput.value;
+    if(activeHmTab === "clients"){
+      if(selectedClientKey){
+        const clients = groupBillsByClient(getAllBills());
+        const stillExists = clients.some(c => c.key === selectedClientKey);
+        if(stillExists){
+          renderClientFolder(selectedClientKey, q);
+        } else {
+          backToClientsList();
+        }
+      } else {
+        renderClientsList(q);
+      }
+    } else {
+      renderHistoryList(q);
+    }
+  }
+
   function openHistoryModal(){
     saveCurrentBillToHistory(true);
     historyModal.classList.add("open");
     historySearchInput.value = "";
     btnClearSearch.style.display = "none";
-    renderHistoryList("");
+    if(!activeHmTab) activeHmTab = "clients";
+    selectedClientKey = null;
+    switchHmTab(activeHmTab);
   }
+
   function closeHistoryModal(){
     historyModal.classList.remove("open");
   }
@@ -1190,19 +1665,41 @@ table{border-collapse:collapse;width:100%}
   document.getElementById("btnHistory").onclick = openHistoryModal;
   btnCloseHistoryModal.onclick = closeHistoryModal;
 
+  document.getElementById("tabHmClients").onclick = () => switchHmTab("clients");
+  document.getElementById("tabHmAll").onclick = () => switchHmTab("all");
+
   document.getElementById("btnSaveCurrent").onclick = ()=>{
     saveCurrentBillToHistory(false);
+    updateHistoryBadge();
+    updateClientsDatalist();
   };
 
   historySearchInput.oninput = ()=>{
     const q = historySearchInput.value;
     btnClearSearch.style.display = q ? "block" : "none";
-    renderHistoryList(q);
+    if(activeHmTab === "clients"){
+      if(selectedClientKey){
+        renderClientFolder(selectedClientKey, q);
+      } else {
+        renderClientsList(q);
+      }
+    } else {
+      renderHistoryList(q);
+    }
   };
+
   btnClearSearch.onclick = ()=>{
     historySearchInput.value = "";
     btnClearSearch.style.display = "none";
-    renderHistoryList("");
+    if(activeHmTab === "clients"){
+      if(selectedClientKey){
+        renderClientFolder(selectedClientKey, "");
+      } else {
+        renderClientsList("");
+      }
+    } else {
+      renderHistoryList("");
+    }
     historySearchInput.focus();
   };
 
@@ -1251,7 +1748,7 @@ table{border-collapse:collapse;width:100%}
           });
           existing.sort((a,b)=>(b.updatedAt||0) - (a.updatedAt||0));
           saveAllBills(existing);
-          renderHistoryList(historySearchInput.value);
+          renderHistoryView();
           say(`✔ Restored ${added} new bills from backup!`);
         } else { say("Invalid backup file format."); }
       }catch(err){ say("Error reading backup file."); }
@@ -1260,88 +1757,7 @@ table{border-collapse:collapse;width:100%}
     reader.readAsText(file);
   };
 
-  function renderHistoryList(filterQuery = ""){
-    const bills = getAllBills();
-    const listEl = document.getElementById("historyList");
-    if(!listEl) return;
-    
-    let filtered = bills;
-    const qStr = (filterQuery || "").trim().toLowerCase();
-    if(qStr){
-      filtered = bills.filter(b => {
-        return (b.invNo && b.invNo.toLowerCase().includes(qStr)) ||
-               (b.partyName && b.partyName.toLowerCase().includes(qStr)) ||
-               (b.phone && b.phone.includes(qStr)) ||
-               (b.invDt && b.invDt.includes(qStr)) ||
-               (b.itemsSummary && b.itemsSummary.toLowerCase().includes(qStr));
-      });
-    }
-
-    if(filtered.length === 0){
-      if(bills.length === 0){
-        listEl.innerHTML = `
-          <div class="history-empty">
-            <div class="he-icon">📑</div>
-            <div class="he-title">No Saved Bills Yet / કોઈ બિલ સેવ નથી</div>
-            <div class="he-desc">Whenever you save a PDF, share on WhatsApp, or tap <strong>Save Bill</strong>, your bills will stay saved here permanently!</div>
-          </div>
-        `;
-      } else {
-        listEl.innerHTML = `
-          <div class="history-empty">
-            <div class="he-icon">🔍</div>
-            <div class="he-title">No matching bills found</div>
-            <div class="he-desc">Try searching with a different customer name or invoice number.</div>
-          </div>
-        `;
-      }
-      return;
-    }
-
-    let htmlCards = "";
-    filtered.forEach(b => {
-      const isCurrent = currentBillId === b.id;
-      const invLabel = b.invNo ? `#${b.invNo}` : "Draft";
-      const dateLabel = b.invDt || "No date";
-      const party = b.partyName || "Unnamed Customer";
-      const amt = b.grandTotal ? `₹ ${b.grandTotal}` : "₹ 0";
-      const dtFormatted = new Date(b.updatedAt || b.createdAt || Date.now()).toLocaleDateString("en-IN", {
-        day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
-      });
-
-      htmlCards += `
-        <div class="bill-card ${isCurrent ? 'active-bill-card' : ''}" data-id="${b.id}">
-          <div class="bc-top">
-            <div style="display:flex;align-items:center;gap:6px">
-              <span class="bc-inv-badge">${invLabel}</span>
-              ${isCurrent ? '<span style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:4px;font-weight:700">CURRENT</span>' : ''}
-              <span class="bc-date">📅 ${dateLabel}</span>
-            </div>
-            <div class="bc-amount">${amt}</div>
-          </div>
-          <div class="bc-party">👤 ${escapeHtml(party)}</div>
-          <div class="bc-sub">
-            ${b.phone ? `<span>📱 ${escapeHtml(b.phone)}</span>` : ""}
-            ${b.itemsSummary ? `<span>📦 ${escapeHtml(b.itemsSummary)}</span>` : ""}
-            <span>🕒 Saved: ${dtFormatted}</span>
-          </div>
-          <div class="bc-actions">
-            <button type="button" class="bc-btn bc-open" data-act="open" data-id="${b.id}">👁️ Open & Edit</button>
-            <button type="button" class="bc-btn bc-pdf" data-act="pdf" data-id="${b.id}">📄 PDF</button>
-            <button type="button" class="bc-btn bc-wa" data-act="wa" data-id="${b.id}">💬 WhatsApp</button>
-            <button type="button" class="bc-btn bc-del" data-act="delete" data-id="${b.id}" title="Delete bill">🗑️</button>
-          </div>
-        </div>
-      `;
-    });
-    listEl.innerHTML = htmlCards;
-  }
-
-  document.getElementById("historyList").onclick = async (e) => {
-    const btn = e.target.closest("button[data-act]");
-    if(!btn) return;
-    const act = btn.dataset.act;
-    const id = btn.dataset.id;
+  async function handleBillAction(act, id){
     const bills = getAllBills();
     const bill = bills.find(b => b.id === id);
     if(!bill) return;
@@ -1384,11 +1800,71 @@ table{border-collapse:collapse;width:100%}
         const updated = bills.filter(b => b.id !== id);
         saveAllBills(updated);
         if(currentBillId === id) currentBillId = null;
-        renderHistoryList(historySearchInput.value);
+        renderHistoryView();
         say("🗑️ Bill deleted from history.");
       }
     }
+  }
+
+  document.getElementById("historyList").onclick = async (e) => {
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+    await handleBillAction(btn.dataset.act, btn.dataset.id);
   };
+
+  document.getElementById("clientBillsList").onclick = async (e) => {
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+    await handleBillAction(btn.dataset.act, btn.dataset.id);
+  };
+
+  document.getElementById("clientsList").onclick = (e) => {
+    const card = e.target.closest(".client-card");
+    if(!card) return;
+    openClientFolder(card.dataset.ckey);
+  };
+
+  // Client autocomplete & quick-fill listener on Party Name
+  const ms1Input = document.querySelector('[data-k="ms1"]');
+  if(ms1Input){
+    function checkClientAutoFill(){
+      const val = (ms1Input.value || "").trim().toLowerCase();
+      if(!val) return;
+      const bills = getAllBills();
+      const clients = groupBillsByClient(bills);
+      const match = clients.find(c => !c.isUnnamed && (c.key === val || c.name.toLowerCase() === val));
+      if(match){
+        let filledAny = false;
+        if(!phone.value && match.phone){
+          phone.value = match.phone;
+          try{ localStorage.setItem(KEY + "-phone", match.phone); }catch(e){}
+          filledAny = true;
+        }
+        const ms2El = document.querySelector('[data-k="ms2"]');
+        if(ms2El && !ms2El.value && match.address){ ms2El.value = match.address; filledAny = true; }
+        const stEl = document.querySelector('[data-k="state"]');
+        if(stEl && !stEl.value && match.state){ stEl.value = match.state; filledAny = true; }
+        const scEl = document.querySelector('[data-k="stateCode"]');
+        if(scEl && !scEl.value && match.stateCode){ scEl.value = match.stateCode; filledAny = true; }
+        if(match.gstin){
+          const firstGBox = document.querySelector('[data-k="pg0"]');
+          if(firstGBox && !firstGBox.value){
+            for(let i=0; i<match.gstin.length && i<15; i++){
+              const gEl = document.querySelector(`[data-k="pg${i}"]`);
+              if(gEl) gEl.value = match.gstin[i];
+            }
+            filledAny = true;
+          }
+        }
+        if(filledAny){
+          save();
+          say(`👤 Auto-filled details for ${match.name}`);
+        }
+      }
+    }
+    ms1Input.addEventListener("change", checkClientAutoFill);
+    ms1Input.addEventListener("input", checkClientAutoFill);
+  }
 
   // PDF, WhatsApp & Print buttons with Auto-Save to history
   document.getElementById("pdfBtn").onclick=async e=>{

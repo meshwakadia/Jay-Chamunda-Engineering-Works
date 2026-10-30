@@ -69,9 +69,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v1.7
-          name: "JCEW Bill v1.7"
-          body: "Direct APK download for JCEW Bill Android app v1.7 - Fixed Other Charges amount bottom clipping in PDF, Official CW logo, All features."
+          tag_name: v1.8
+          name: "JCEW Bill v1.8"
+          body: "Direct APK download for JCEW Bill Android app v1.8 - Client-wise bill organization, Company folders, Client autocomplete & quick-fill, All features."
           files: /tmp/JCEW-Bill.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
